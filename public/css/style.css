@@ -112,6 +112,7 @@
       margin-top: 10px;
       margin-left: 5px;
       text-align: center;
+      position: relative;
     }
 
     #handToolbar {
