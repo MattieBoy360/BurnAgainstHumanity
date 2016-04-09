@@ -12,23 +12,26 @@ var cardCzarName;
 var currentQuestion;
 var clients = [];
 var usernames = {};
+var userHands = {};
 var winner;
 var playing = false;
+var players = 0;
+var hand = 0;
 module.exports = function(io) {
 	
-	var players = 0;
-	var hand = 0;
+	
 io.on('connection', function(socket){
 	console.log('a user connected with id ' + socket.id);
 	clients.push(socket.id);
 
 	console.log(clients);
-
+	socket.isPlaying = false;
 	socket.on('disconnect', function() {
-		
+		var left = getUsernameByID(socket.id);
 		delete usernames[socket.id];
-
-		players--;
+		if(socket.isPlaying) {
+			players--;
+		}
 		if(!playing) {
 			
 			io.emit('waiting', {number: 3-players});
@@ -41,11 +44,17 @@ io.on('connection', function(socket){
 			gameOver();
 			io.emit('waiting', {number: 3-players});
 		}	
+		if(playing) {
+			var take = removeUsersCards(socket.id);
+			io.emit('removeCard', {card: take});
+		}
+		io.emit('playerLeft', left);
 		clients.splice(clients.indexOf(socket.id), 1);
 
 	});
 
 	socket.on('adduser', function(username) {
+		socket.isPlaying = true;
 		if(clients.length<3) {
 			
 			socket.username = username;
@@ -63,8 +72,9 @@ io.on('connection', function(socket){
 				setUpGame();
 				console.log(currentQuestion);
 				for(i = 0; i < clients.length; i++) {
-					
-					io.to(clients[i]).emit('join', {whitecards: Game.dealWhite(whiteDeck), blackcard: currentQuestion});
+					var wcards = Game.dealWhite(whiteDeck);
+					userHands[clients[i]] = wcards;
+					io.to(clients[i]).emit('join', {whitecards: wcards, blackcard: currentQuestion});
 				}
 				cardCzarName = selectCardCzar();
 				io.emit('updateCzar', cardCzarName);
@@ -79,7 +89,9 @@ io.on('connection', function(socket){
 				usernames[socket.id] = username;
 				players++;
 				socket.broadcast.emit('playerAdded', username);
-				socket.emit('join', {whitecards: Game.dealWhite(whiteDeck), blackcard: currentQuestion});
+				var wcards = Game.dealWhite(whiteDeck);
+				userHands[socket.id] = wcards;
+				socket.emit('join', {whitecards: wcards, blackcard: currentQuestion});
 		}
 	});
 
@@ -104,9 +116,11 @@ io.on('connection', function(socket){
 	socket.on('addCard', function(data) {
 		hand++;
 		activeHand[data.card] = socket.id;
-		console.log(activeHand);
+		removeCardFromHand(socket.id, data.card);
+		var newWhite = Game.dealCard(whiteDeck);
+		userHands[socket.id].push(newWhite);
 		io.emit('cardPlayed', {card: data.card});
-		socket.emit('addCard', {card: Game.dealCard(whiteDeck)});
+		socket.emit('addCard', {card: newWhite});
 		console.log("hand is " + hand);
 		console.log("players is " + players);
 		if(hand == players-1) {
@@ -141,6 +155,22 @@ function getUsernameByID(id) {
 	return usernames[id];
 }
 
+function removeUsersCards(id) {
+	for(key in activeHand) {
+		if (activeHand[key] === id) {
+			delete activeHand[key];
+			hand--;
+			return key;
+		}
+	}
+
+	var addBack = userHands[id];
+	for(card in addBack) {
+		whiteDeck.push(card);
+	}
+	delete userHands[id];
+}
+
 function setUpGame() {
 	whiteDeck = Game.createDeck("white");
 	blackDeck = Game.createDeck("black");
@@ -157,6 +187,12 @@ function newRound() {
 	currentQuestion = Game.dealCard(blackDeck);
 	cardCzarName = nextCardCzar();
 
+}
+
+function removeCardFromHand(id, card) {
+	var tempHand = userHands[id];
+	tempHand.splice(tempHand.indexOf(card), 1);
+	userHands[id] = tempHand;
 }
 
 function gameOver() {
