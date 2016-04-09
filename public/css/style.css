@@ -1,0 +1,123 @@
+
+@font-face {
+    font-family: myHelvetica;
+    src: url('HelveticaNeueBold.ttf') format('truetype');
+    font-weight: bold;
+}
+    html, body { 
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      
+      overflow: hidden;
+      font-family: myHelvetica;
+    }
+
+    #gameBoard {
+      position: absolute;
+      top: 0;
+      left: 200px;
+      right: 0;
+      background-color: blue;
+      display: inline-block;
+      height: 100%;
+    }
+
+    #gameinfo {
+      background-color: red;
+      width: 200px;
+      height: 100%;
+      padding-top: 10px;
+     text-align: center;
+    }
+
+    #blackcard {
+       padding-bottom: 205px;
+      width: 200px;
+      min-width: 200px;
+     
+    }
+
+
+    
+
+    #handToolbar .whitecard, #activeHand .whitecard {
+      border: 1px solid black;
+      margin: 1px;
+    }
+
+    #handToolbar .whitecard:last-child {
+      padding-right: 0px;
+    }
+    #handToolbar .whitecard:first-child {
+      padding-left: 0px;
+    }
+
+    #activeHand .whitecard {
+      
+    }
+
+    #lastAnswer {
+      margin-top: 5px;
+    }
+
+    #gameinfo .whitecard {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .blackcard  {
+      display: block;
+      margin: 0 auto;
+    }
+
+    #controls {
+     position: relative;
+    }
+
+    #whitecards {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        
+      white-space:nowrap
+    }
+
+    #activeHand {
+      margin-top: 40px;
+      margin-left: 5px;
+      text-align: center;
+    }
+
+    #handToolbar {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      left: 200px;
+      background-color: gray;
+    }
+
+    #lastRound {
+      margin-top: 20px;
+    }
+
+    #titleBar {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      text-align: center;
+      background-color: white;
+    }
+
+    #label {
+      width: 100%;
+      background-color: white;
+      padding-left: 5px;
+      text-align: center;
+    }
+
+    .selectable:hover {
+      border: 2px solid red !important;
+      margin: 0px !important;
+    }

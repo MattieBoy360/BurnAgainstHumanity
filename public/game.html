@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Burn Against Humanity</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+  </head>
+  <body>
+    <div id="gameinfo">
+      <div id="blackcard">
+        <div class="front">
+          <img class="blackcard" src="img/burn-back-black.png" width="150" />
+        </div>
+        <div class="back"></div>
+        <div style="clear:both"></div>
+      </div>
+
+    
+
+      <div id="info">
+        <span><b>Card Czar: </b></span><span id="cardCzarName">No one!</span><br>
+        <span><b>Score: </b></span><span id="score">0</span>
+      </div>
+
+      <div id="lastRound"> 
+        <span><b>Last round winner: </b></span><br><span id="winnerName">No one!</span><br>
+        <div id="lastQuestion"></div>
+        <div id="lastAnswer"></div>
+      </div>
+
+</div>
+
+<div id="gameBoard">
+<div id="titleBar">Burn Against Humanity</div>
+
+<div id="activeHand">
+
+</div>
+  </div>
+
+
+
+  
+
+
+<div id="handToolbar">
+  <div id="label"><span>Your Hand:</span></div>
+  <div id="whitecards">
+
+</div>
+
+  </div>
+  </body>
+
+
+
+
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdn.rawgit.com/nnattawat/flip/v1.0.20/dist/jquery.flip.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="bah.min.js"></script>
+</html>
