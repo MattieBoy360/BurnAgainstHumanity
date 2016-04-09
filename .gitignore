@@ -3,3 +3,4 @@ Gruntfile.js
 flightplan.js
 public/img/blackcards/
 public/img/whitecards/
+*.log
